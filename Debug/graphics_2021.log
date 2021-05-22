@@ -1,0 +1,42 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(505,5): warning MSB8004: Output 디렉터리가 슬래시로 끝나지 않습니다. Output 디렉터리의 적절한 평가를 허용하는 데 필요하므로 이 빌드 인스턴스에서 슬래시를 추가합니다.
+  main.cpp
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objloader.hpp(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objloader.hpp(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\shader.h(45,17): warning C4244: '초기화 중': 'std::streamoff'에서 'size_t'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\shader.h(123,5): warning C4305: '초기화 중': 'double'에서 'GLfloat'(으)로 잘립니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\shader.h(195,5): warning C4305: '초기화 중': 'double'에서 'GLfloat'(으)로 잘립니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\shader.h(221,19): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\shader.h(227,19): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(48,27): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(82,44): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(83,47): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(96,44): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(97,47): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(110,44): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(111,46): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(124,44): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(125,46): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(140,46): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(141,47): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(154,46): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(155,47): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(170,46): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(171,46): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(184,46): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(185,46): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\bullet.h(207,27): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\item.h(35,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\item.h(41,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\enemy.h(35,1): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\objects\enemy.h(36,1): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\main.cpp(148,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\main.cpp(158,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\main.cpp(168,23): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\main.cpp(179,19): warning C4244: '초기화 중': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\main.cpp(180,19): warning C4244: '초기화 중': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\main.cpp(268,22): warning C4553: '==': 식의 결과가 사용되지 않습니다. '='을(를) 의도했습니까?
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\main.cpp(289,28): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\main.cpp(292,30): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\main.cpp(295,30): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\main.cpp(298,31): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  graphics_2021.vcxproj -> C:\Users\rndwl\OneDrive\바탕 화면\그래픽\graphics_2021\graphics_2021\bin\x86\graphics_2021.exe
