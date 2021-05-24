@@ -1,5 +1,4 @@
 /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/seunguk-do/Desktop/graphics_2021/graphics_2021
--- Found OpenGL: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk/System/Library/Frameworks/OpenGL.framework   
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /Users/seunguk-do/Desktop/graphics_2021/graphics_2021/cmake-build-debug

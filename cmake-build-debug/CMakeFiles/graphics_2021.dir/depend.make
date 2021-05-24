@@ -20,6 +20,7 @@ CMakeFiles/graphics_2021.dir/main.cpp.o: ../objects/object.h
 CMakeFiles/graphics_2021.dir/main.cpp.o: ../objects/player.h
 CMakeFiles/graphics_2021.dir/main.cpp.o: ../objloader.hpp
 CMakeFiles/graphics_2021.dir/main.cpp.o: ../shader.h
+CMakeFiles/graphics_2021.dir/main.cpp.o: ../stb_image.h
 CMakeFiles/graphics_2021.dir/main.cpp.o: ../view.h
 CMakeFiles/graphics_2021.dir/main.cpp.o: /usr/local/Cellar/glew/2.2.0_1/include/GL/glew.h
 CMakeFiles/graphics_2021.dir/main.cpp.o: /usr/local/Cellar/glfw/3.3.4/include/GLFW/glfw3.h

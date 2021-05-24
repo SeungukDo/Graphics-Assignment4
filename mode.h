@@ -2,29 +2,29 @@
 #define MODE_H
 
 enum Gamemode {
-	NORMAL,
-	ALLPASS,
-	ALLFAIL,
+    NORMAL,
+    ALLPASS,
+    ALLFAIL,
 };
 
 enum LineRendering {
-	SHOWING,
-	HIDING
+    SHOWING,
+    HIDING
 };
 
 enum Shading {
-	GOURAUD,
-	PHONG
+    GOURAUD,
+    PHONG
 };
 
 enum Diffuse {
-	D_ENABLE,
-	D_DISABLE
+    D_ENABLE,
+    D_DISABLE
 };
 
 enum NormalMap {
-	N_ENABLE,
-	N_DISABLE
+    N_ENABLE,
+    N_DISABLE
 };
 
 extern Gamemode mode;

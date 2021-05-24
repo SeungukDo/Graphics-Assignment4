@@ -20,8 +20,10 @@
 GLuint VBO;
 GLuint plane_buffer;
 GLuint plane_normal;
+GLuint plane_uv;
 GLuint plane_buffer2;
 GLuint plane_normal2;
+GLuint plane_uv2;
 GLuint grid_buffer;
 GLuint planet_buffer;
 GLuint planet_normal;
@@ -242,6 +244,8 @@ void InitBuffer() {
     glGenBuffers(1, &planet_buffer);
     glGenBuffers(1, &plane_normal);
     glGenBuffers(1, &plane_normal2);
+    glGenBuffers(1, &plane_uv);
+    glGenBuffers(1, &plane_uv2);
     glGenBuffers(1, &planet_normal);
     glGenBuffers(1, &WIN);
     glGenBuffers(1, &LOSE);
@@ -252,11 +256,17 @@ void InitBuffer() {
     glBindBuffer(GL_ARRAY_BUFFER, plane_normal);    //  player
     glBufferData(GL_ARRAY_BUFFER, normals_player.size() * sizeof(glm::vec3), &normals_player[0], GL_STATIC_DRAW);
 
+    glBindBuffer(GL_ARRAY_BUFFER, plane_uv);    //  player
+    glBufferData(GL_ARRAY_BUFFER, uvs_player.size() * sizeof(glm::vec2), &uvs_player[0], GL_STATIC_DRAW);
+
     glBindBuffer(GL_ARRAY_BUFFER, plane_buffer2);    //  enemy
     glBufferData(GL_ARRAY_BUFFER, vertices_enemy.size() * sizeof(glm::vec3), &vertices_enemy[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, plane_normal2);    //  enemy
     glBufferData(GL_ARRAY_BUFFER, normals_enemy.size() * sizeof(glm::vec3), &normals_enemy[0], GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, plane_uv2);    //  enemy
+    glBufferData(GL_ARRAY_BUFFER, uvs_enemy.size() * sizeof(glm::vec2), &uvs_enemy[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, planet_buffer);    //  planet
     glBufferData(GL_ARRAY_BUFFER, vertices_planet.size() * sizeof(glm::vec3), &vertices_planet[0], GL_STATIC_DRAW);

@@ -20,6 +20,8 @@
 #include "mode.h"
 #include "hit.h"
 #include "view.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 const GLuint WIDTH = 800;
 const GLuint HEIGHT = 600;
@@ -40,6 +42,7 @@ float planet2 = 0.0f;
 glm::mat4 dir_light = glm::mat4(1.f);
 float light_angle = 0.f;
 float applied_light_angle = 0.f;
+glm::vec3 point_light = glm::vec3(0.f);
 
 Viewmode view = TPS;
 int over = 0;
@@ -54,6 +57,8 @@ extern GLuint planet_buffer;
 extern GLuint shaderProgram;
 extern GLuint WIN;
 extern GLuint LOSE;
+GLuint Texture;
+GLuint TextureID;
 
 std::vector<glm::vec3> vertices_player;
 std::vector<glm::vec2> uvs_player;
@@ -80,6 +85,7 @@ void drawGrid();
 void Planett();
 void drawPlanet(glm::mat4 inn, glm::vec4 color);
 void determineColor(glm::vec4* player_color, glm::vec4* enemy_color);
+void InitTexture();
 
 void init(void) {
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -111,12 +117,28 @@ static void display()
 
         determineColor(&player_color, &enemy_color);
 
+        glBindTexture(GL_TEXTURE_2D, Texture);
+
         // Draw Grid
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, grid_buffer);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
         drawGrid();
 
+        // Draw Player
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, plane_buffer);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+
+        glEnableVertexAttribArray(1);
+        glBindBuffer(GL_ARRAY_BUFFER, plane_normal);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, plane_uv);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
+
+        drawPlayer(ModelMatrix_player, player_color);
 
         // Draw Planet
         glEnableVertexAttribArray(0);
@@ -128,24 +150,19 @@ static void display()
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
         Planett();
 
-        // Draw Player
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, plane_buffer);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
-
-        glEnableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, plane_normal);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
-        drawPlayer(ModelMatrix_player, player_color);
-
         // Draw Enemy
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, plane_buffer2);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 
         glEnableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, plane_normal);
+        glBindBuffer(GL_ARRAY_BUFFER, plane_normal2);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
+
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, plane_uv2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), 0);
+
         drawEnemy(ModelMatrix_enemy, enemy_color);
 
         glEnableVertexAttribArray(0);
@@ -153,14 +170,16 @@ static void display()
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
+        GLint use_texture_loc = glGetUniformLocation(shaderProgram, "useTexture");
+        glUniform1i(use_texture_loc, false);
+
         // Player Bullet
         player_bullet_positions = player_bullets.get_bullet_positions();
         for (i = 0; i < player_bullet_positions.size(); i++) {
             Position bullet_position = player_bullet_positions[i];
-
             inn = glm::translate(glm::mat4(1.f), glm::vec3(bullet_position.x, 0.f, bullet_position.y));
-            inn = glm::scale(inn, glm::vec3(0.2f, 0.2f, 0.2f));
-            drawRect(inn, glm::vec4(1.f, 0.5f, 0.f, 1.f));
+            inn = glm::scale(inn, glm::vec3(0.01f, 0.01f, 0.01f));
+            drawPlanet(inn, glm::vec4(1.f, 0.5f, 0.f, 1.f));
         }
 
         // Enemy Bullet
@@ -169,8 +188,8 @@ static void display()
             Position bullet_position = enemy_bullet_positions[i];
 
             inn = glm::translate(glm::mat4(1.f), glm::vec3(bullet_position.x, 0.f, bullet_position.y));
-            inn = glm::scale(inn, glm::vec3(0.2f, 0.2f, 0.2f));
-            drawRect(inn, glm::vec4(1.f, 0.5f, 1.f, 1.f));
+            inn = glm::scale(inn, glm::vec3(0.01f, 0.01f, 0.01f));
+            drawPlanet(inn, glm::vec4(1.f, 0.5f, 1.f, 1.f));
         }
 
         // Item
@@ -179,8 +198,8 @@ static void display()
             Position item_position = item_positions[i];
 
             inn = glm::translate(glm::mat4(1.f), glm::vec3(item_position.x, 0.f, item_position.y));
-            inn = glm::scale(inn, glm::vec3(0.2f, 0.2f, 0.2f));
-            drawRect(inn, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
+            inn = glm::scale(inn, glm::vec3(0.01f, 0.01f, 0.01f));
+            drawPlanet(inn, glm::vec4(0.1f, 0.1f, 0.1f, 1.f));
         }
 
         GLint pr_matrix_loc = glGetUniformLocation(shaderProgram, "projection");
@@ -199,12 +218,13 @@ static void display()
         }
         glUniformMatrix4fv(pr_matrix_loc, 1, GL_FALSE, glm::value_ptr(pr));
 
-        glm::vec4 light_vec = dir_light * glm::vec4(1.f);
+        glm::vec4 light_vec = glm::vec4(2.5 - 7.5 * cos(applied_light_angle), abs(7.5 * sin(applied_light_angle)), 0.f, 0.f);
         bool inbool = (shading == GOURAUD);
         GLint amb_vec_loc = glGetUniformLocation(shaderProgram, "AmbientProduct");
         GLint dif_vec_loc = glGetUniformLocation(shaderProgram, "DiffuseProduct");
         GLint spec_vec_loc = glGetUniformLocation(shaderProgram, "SpecularProduct");
         GLint light_vec_loc = glGetUniformLocation(shaderProgram, "LightPosition");
+        GLint plight_vec_loc = glGetUniformLocation(shaderProgram, "PLightPosition");
         GLint shi_float_loc = glGetUniformLocation(shaderProgram, "Shininess");
         GLint gr_bool_loc = glGetUniformLocation(shaderProgram, "Gouraud");
 
@@ -213,6 +233,8 @@ static void display()
         glUniform4f(spec_vec_loc, 1.f, 1.f, 1.f, 1.f);
         glUniform4f(light_vec_loc, light_vec.x, light_vec.y, light_vec.z, light_vec.a);
         glUniform1f(shi_float_loc, 1.f);
+        glUniform4f(plight_vec_loc, point_light.x, point_light.y, point_light.z, 1.f);
+        glUniform1f(shi_float_loc, 50.f);
         glUniform1i(gr_bool_loc, inbool);
     }
     else if (over == 1) {
@@ -260,71 +282,44 @@ void Init() {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glEnable(GL_DEPTH_TEST);
 }
-/*
-void keyboard(unsigned char key, int x, int y) {
-    switch (key) {
-    case 'c':
+
+void keyboard(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_C && action == GLFW_PRESS) {
         if (mode == ALLPASS) mode = NORMAL;
         else mode = ALLPASS;
-        break;
-    case 'f':
+    } else if (key == GLFW_KEY_F && action == GLFW_PRESS) {
         if (mode == ALLFAIL) mode = NORMAL;
         else mode = ALLFAIL;
-        break;
-    case 'v':
+    } else if (key == GLFW_KEY_V && action == GLFW_PRESS) {
         view_change();
-        break;
-    case 'r':
+    } else if (key == GLFW_KEY_R && action == GLFW_PRESS) {
         if (line_rendering == SHOWING) line_rendering = HIDING;
         else line_rendering = SHOWING;
-        break;
-    case 's':
+    } else if (key == GLFW_KEY_S && action == GLFW_PRESS) {
         if (shading == GOURAUD) shading = PHONG;
-        else shading == GOURAUD;
-        break;
-    case 'd':
+        else shading = GOURAUD;
+    } else if (key == GLFW_KEY_D && action == GLFW_PRESS) {
         if (diffuse == D_ENABLE) diffuse = D_DISABLE;
         else diffuse = D_ENABLE;
-        break;
-    case 'n':
+    } else if (key == GLFW_KEY_N && action == GLFW_PRESS) {
         if (normal_map == N_ENABLE) normal_map = N_DISABLE;
         else normal_map = N_ENABLE;
-    case 32:  //space bar
-        player.shoot();
-        break;
-    }
-    glutPostRedisplay();
-}
-
-void specialkeyboard(int key, int x, int y) {
-    Position player_position = player.get_position();
-
-    switch (key) {
-    case GLUT_KEY_UP:
+    } else if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
         player.move_up(0.05);
-        break;
-    case GLUT_KEY_DOWN:
+    } else if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
         player.move_down(0.05);
-        break;
-    case GLUT_KEY_RIGHT:
+    } else if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
         player.move_left(0.05);
-        break;
-    case GLUT_KEY_LEFT:
+    } else if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
         player.move_right(0.05);
-        break;
     }
-    glutPostRedisplay();
 }
 
-void idle_func() {
-    glutPostRedisplay();
-}
-
-void timer_func(int a) {
+void timer_func() {
     enemy_list.getEnemy().shoot();
     if (enemy_list.getIndex() != 0) { enemy_list.move_2(); }
 
-    glutTimerFunc(1300, timer_func, 1);
+    //glutTimerFunc(1300, timer_func, 1);
 }
 
 void timer_func2(int a) {
@@ -343,9 +338,9 @@ void timer_func2(int a) {
 
     check_hit();
     check_get_item();
-    glutTimerFunc(10, timer_func2, 1);
+    //glutTimerFunc(10, timer_func2, 1);
 }
-*/
+
 int main(int argc, char** argv) {
     if( !glfwInit() )
     {
@@ -377,8 +372,7 @@ int main(int argc, char** argv) {
     }
 #endif
     Init();
-    
-    //glutDisplayFunc(display);
+    glfwSetKeyCallback(window, keyboard);
     //glutKeyboardFunc(keyboard);
     //glutSpecialFunc(specialkeyboard);
     //glutIdleFunc(idle_func);
@@ -387,8 +381,11 @@ int main(int argc, char** argv) {
 
     InitBuffer();
     InitShaders();
+    InitTexture();
+
 
     do {
+        glBindTexture(GL_TEXTURE_2D, Texture);
         display();
     } while(glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
             glfwWindowShouldClose(window) == 0);
@@ -416,8 +413,11 @@ void drawGrid() {
     GLint tr_matrix_loc = glGetUniformLocation(shaderProgram, "transform");
     GLint vertexC = glGetUniformLocation(shaderProgram, "ourColor");
     glUniform4f(vertexC, 0.f, 0.f, 0.f, 1.f);
-
     glUniformMatrix4fv(tr_matrix_loc, 1, GL_FALSE, glm::value_ptr(inn));
+
+    GLint use_texture_loc = glGetUniformLocation(shaderProgram, "useTexture");
+    glUniform1i(use_texture_loc, false);
+
     glDrawArrays(GL_LINES, 0, vertices_grid.size());
 }
 
@@ -445,6 +445,9 @@ void drawPlayer(glm::mat4 inn, glm::vec4 color) {
     GLint vertexC = glGetUniformLocation(shaderProgram, "ourColor");
     glUniform4f(vertexC, color.x, color.y, color.z, 1.f);
 
+    GLint use_texture_loc = glGetUniformLocation(shaderProgram, "useTexture");
+    glUniform1i(use_texture_loc, false);
+
     glDrawArrays(GL_TRIANGLES, 0, vertices_player.size());
 }
 
@@ -456,24 +459,27 @@ void drawEnemy(glm::mat4 inn, glm::vec4 color) {
     GLint vertexC = glGetUniformLocation(shaderProgram, "ourColor");
     glUniform4f(vertexC, color.x, color.y, color.z, 1.f);
 
+    GLint use_texture_loc = glGetUniformLocation(shaderProgram, "useTexture");
+    glUniform1i(use_texture_loc, true);
+
     glDrawArrays(GL_TRIANGLES, 0, vertices_enemy.size());
 }
 
 void Planett() {
     glm::mat4 inn = glm::mat4(1.f);
-    glm::mat4 gg = glm::translate(inn, glm::vec3(9.f, -2.f, 4.f));
+    glm::mat4 gg = glm::translate(inn, glm::vec3(2.5f, -1.2f, 2.5f));
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
     drawPlanet(gg, glm::vec4(0.5, 0.5, 0.0, 1.0));
     gg = glm::rotate(gg, glm::radians(planet), glm::vec3(0.f, 1.f, 0.f));
     gg = glm::translate(gg, glm::vec3(3.f, 0.f, 3.f));
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
     drawPlanet(gg, glm::vec4(0.5, 0.0, 0.0, 1.0));
-    gg = glm::rotate(gg, glm::radians(planet * 2), glm::vec3(1.f, 1.f, 0.f));
+    gg = glm::rotate(gg, glm::radians(planet * 2), glm::vec3(1.f, -1.f, 0.f));
     gg = glm::translate(gg, glm::vec3(3.f, 0.f, 3.f));
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
     drawPlanet(gg, glm::vec4(0.0, 0.5, 0.0, 1.f));
 
-    gg = glm::translate(inn, glm::vec3(3.0, 1.2, 4.0));
+    /*gg = glm::translate(inn, glm::vec3(3.0, 1.2, 4.0));
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
     drawPlanet(gg, glm::vec4(0.5, 0.5, 0.0, 1.0));
     gg = glm::rotate(gg, glm::radians(planet), glm::vec3(0.f, 1.f, 0.f));
@@ -481,9 +487,15 @@ void Planett() {
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
     drawPlanet(gg, glm::vec4(0.0, 0.8, 0.4, 1.0));
     gg = glm::rotate(gg, glm::radians(planet * 2), glm::vec3(1.f, 1.f, 0.f));
-    gg = glm::translate(gg, glm::vec3(3.f, 0.f, 3.f));
+    gg = glm::translate(gg, glm::vec3(20.f, 0.f, 20.f));
     gg = glm::scale(gg, glm::vec3(0.3f, 0.3f, 0.3f));
-    drawPlanet(gg, glm::vec4(0.5, 0.5, 0.5, 1.f));
+    drawPlanet(gg, glm::vec4(0.5, 0.5, 0.5, 1.f));*/
+
+    glm::vec4 aa = glm::vec4(0.f, 0.f, 0.f, 1.f);
+    aa = gg * aa;
+    point_light = glm::vec3(aa.x, aa.y, aa.z);
+
+    std::cout << point_light.x << " + " << point_light.y << " + " << point_light.z << std::endl;
 }
 
 void drawPlanet(glm::mat4 inn, glm::vec4 color) {
@@ -493,6 +505,9 @@ void drawPlanet(glm::mat4 inn, glm::vec4 color) {
 
     GLint vertexC = glGetUniformLocation(shaderProgram, "ourColor");
     glUniform4f(vertexC, color.x, color.y, color.z, 1.f);
+
+    GLint use_texture_loc = glGetUniformLocation(shaderProgram, "useTexture");
+    glUniform1i(use_texture_loc, false);
 
     glDrawArrays(GL_TRIANGLES, 0, vertices_planet.size());
 }
@@ -542,4 +557,27 @@ void isWire() {
     else {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
+}
+
+void InitTexture() {
+    glGenTextures(1, &Texture);
+    glBindTexture(GL_TEXTURE_2D, Texture);
+// 텍스처 wrapping/filtering 옵션 설정(현재 바인딩된 텍스처 객체에 대해)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+// 텍스처 로드 및 생성
+    int width, height, nrChannels;
+    unsigned char *data = stbi_load("../Diffuse.jpg", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
 }
